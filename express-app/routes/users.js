@@ -3,9 +3,20 @@ const router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send({
-    items: [
-      {
+	res.send(users);
+});
+
+router.get('/:id', function(req, res, next) {
+	id = parseInt(req.params["id"]);
+	let user = users.find(u => u.id === id);
+	if (user === undefined) {
+		res.status(404).json();
+	} else {
+		res.status(201).json(user);
+	}
+});
+
+let users = [{
         "id" : 1,
         "name" : "Степан Григорьев",
       },
@@ -13,17 +24,12 @@ router.get('/', function(req, res, next) {
         "id" : 2,
         "name" : "Александр Левенских"
       }
-    ]
-  });
-});
+];
 
-
-let users = [];
-
-router.post('/', function(req, resp) {
+router.post('/', function(req, res) {
 	newUser = req.body;
 	users.push(newUser);
-	resp.status(201).json(newUser);
+	res.status(201).json(newUser);
 });
 
 module.exports = router;
